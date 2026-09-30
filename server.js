@@ -1,12 +1,14 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+
 app.post('/api/sort-message', async (req, res) => {
   const { message } = req.body;
   
@@ -42,7 +44,6 @@ app.post('/api/sort-message', async (req, res) => {
         return res.status(500).json({ error: 'OpenRouter API Error' });
     }
 
-    // Extract Jev's strict decision and confidence probability (0.0 to 1.0)
     const answer = data.answers.category;
     const result = {
       category: answer.choice,
@@ -56,7 +57,8 @@ app.post('/api/sort-message', async (req, res) => {
   }
 });
 
-app.use(express.static('public'));
+// Explicitly define the absolute path to the public folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
